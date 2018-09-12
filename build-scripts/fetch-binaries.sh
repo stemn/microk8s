@@ -38,4 +38,17 @@ echo $KUBE_VERSION > $KUBE_SNAP_BINS/version
   mv istio-${ISTIO_ERSION}/install/kubernetes/helm/istio/templates/crds.yaml ./istio-yaml/
   mv istio-${ISTIO_ERSION}/install/kubernetes/istio-demo-auth.yaml ./istio-yaml/
   mv istio-${ISTIO_ERSION}/install/kubernetes/istio-demo.yaml ./istio-yaml/
+
+  mkdir -p containerd
+  CONTAINERD_ERSION=$(echo $CONTAINERD_VERSION | sed 's/v//g')
+  curl -LO https://github.com/containerd/containerd/releases/download/${CONTAINERD_VERSION}/containerd-${CONTAINERD_ERSION}.linux-amd64.tar.gz
+  gzip -d containerd-${CONTAINERD_ERSION}.linux-amd64.tar.gz
+  tar -xvf containerd-${CONTAINERD_ERSION}.linux-amd64.tar -C containerd
+  mv containerd/bin/* containerd/
+  rmdir containerd/bin
+
+  mkdir -p runc
+  curl -LO https://github.com/opencontainers/runc/releases/download/${RUNC_VERSION}/runc.amd64
+  mv runc.amd64 runc/runc
+  chmod +x runc/runc
 )
