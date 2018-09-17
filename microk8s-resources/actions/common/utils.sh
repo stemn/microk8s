@@ -25,3 +25,21 @@ skip_opt_in_config() {
     sudo "${SNAP}/bin/sed" -i '/'"$opt"'/d' "${config_file}"
 }
 
+
+wait_for_service() {
+    service="$1"
+    sudo systemctl restart snap.${SNAP_NAME}.daemon-${service}
+    try_attempt=0
+    while ! (sudo systemctl is-active --quiet snap.${SNAP_NAME}.daemon-${service}) &&
+          ! [ ${try_attempt} -eq 30 ]
+    do
+        try_attempt=$((try_attempt+1))
+        sleep 1
+    done
+    if [ ${try_attempt} -eq 30 ]
+    then
+        echo "fail"
+    else
+        echo "ok"
+    fi
+}
