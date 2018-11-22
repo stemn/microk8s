@@ -178,6 +178,10 @@ parts:
         # Istio support
         rm "actions/enable.istio.sh"
         rm "actions/disable.istio.sh"
+        # Prometheus support
+        rm "actions/enable.prometheus.sh"
+        rm "actions/disable.prometheus.sh"
+        rm -rf "actions/prometheus"
       else
         # Istio addon
         echo "Preparing istio"
