@@ -7,6 +7,7 @@ from validators import (
     validate_registry,
     validate_forward,
     validate_metrics_server,
+    validate_prometheus,
 )
 from utils import microk8s_enable, wait_for_pod_state, microk8s_disable
 
@@ -74,3 +75,10 @@ class TestLiveAddons(object):
 
         """
         validate_metrics_server()
+
+    def test_prometheus(self):
+        """
+        Validates prometheus addon.
+
+        """
+        validate_prometheus()
