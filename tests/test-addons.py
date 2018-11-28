@@ -10,6 +10,7 @@ from validators import (
     validate_registry,
     validate_forward,
     validate_metrics_server,
+    validate_fluentd,
 )
 from utils import microk8s_enable, wait_for_pod_state, microk8s_disable, microk8s_reset
 from subprocess import Popen, PIPE, STDOUT, CalledProcessError
@@ -136,3 +137,14 @@ class TestAddons(object):
         print("Disabling metrics-server")
         microk8s_disable("metrics-server")
 
+    def test_fluentd(self):
+        """
+        Test fluentd.
+
+        """
+        print("Enabling fluentd")
+        microk8s_enable("fluentd")
+        print("Validating Fluentd")
+        validate_fluentd()
+        print("Disabling fluentd")
+        microk8s_disable("fluentd")
