@@ -219,3 +219,22 @@ def validate_metrics_server():
         attempt -= 1
 
     assert attempt > 0
+
+
+def validate_jaeger():
+    """
+    Validate the jaeger operator
+    """
+    wait_for_pod_state("", "default", "running", label="name=jaeger-operator")
+    attempt = 30
+    while attempt > 0:
+        try:
+            output = kubectl("get ingress")
+            if "simplest-query" in output:
+                break
+        except:
+            pass
+        time.sleep(2)
+        attempt -= 1
+
+    assert attempt > 0

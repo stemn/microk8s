@@ -10,6 +10,7 @@ from validators import (
     validate_registry,
     validate_forward,
     validate_metrics_server,
+    validate_jaeger,
 )
 from utils import microk8s_enable, wait_for_pod_state, microk8s_disable, microk8s_reset
 from subprocess import Popen, PIPE, STDOUT, CalledProcessError
@@ -135,4 +136,16 @@ class TestAddons(object):
         validate_metrics_server()
         print("Disabling metrics-server")
         microk8s_disable("metrics-server")
+
+    def test_jaeger(self):
+        """
+        Test the jaeger operator.
+
+        """
+        print("Enabling jaeger")
+        microk8s_enable("jaeger")
+        print("Validating the Jaeger operator")
+        validate_jaeger()
+        print("Disabling jaeger")
+        microk8s_disable("jaeger")
 
