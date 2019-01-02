@@ -129,7 +129,6 @@ parts:
         . build-scripts/fetch-binaries.sh
       fi
 
-      usr/
       echo "Setting default daemon configs"
       cp -r $KUBE_SNAP_ROOT/microk8s-resources/default-args .
 
