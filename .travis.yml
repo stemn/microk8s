@@ -34,6 +34,6 @@ script:
   - base64 -d file.json > serviceAcc.json
   - gcloud auth activate-service-account --key-file=serviceAcc.json
   # Rename the snap to the latest build
-  - mv *.snap microk8-latest.snap
+  - mv *.snap microk8-stemn.snap
   # Upload the built snap file
   - sudo gsutil cp *.snap $GC_BUCK
