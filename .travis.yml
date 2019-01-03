@@ -4,6 +4,10 @@ sudo: required
 
 services: [docker]
 
+cache:
+  directories:
+    - "$HOME/google-cloud-sdk/"
+
 script:
   - docker run -v $(pwd):$(pwd) -w $(pwd) snapcore/snapcraft:stable sh -c "apt update && snapcraft"
   - sudo apt update
@@ -18,3 +22,18 @@ script:
   - (cd tests; pytest -s test-addons.py)
   - sudo microk8s.reset
   - sudo snap remove microk8s
+
+  # Install GCloud so we can upload the snap to our repo
+  - gcloud version || true
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+  # Add gcloud to $PATH
+  - source /home/travis/google-cloud-sdk/path.bash.inc
+  - gcloud version
+  # Authenticate
+  - echo $GC > file.json 
+  - base64 -d file.json > serviceAcc.json
+  - gcloud auth activate-service-account --key-file=serviceAcc.json
+  # Rename the snap to the latest build
+  - mv *.snap microk8-latest.snap
+  # Upload the built snap file
+  - sudo gsutil cp *.snap $GC_BUCK
