@@ -13,7 +13,7 @@ clean_cluster() {
   do
     echo "Cleaning resources in namespace $NS"
     # Remove all resource types except the standard k8s apiservices themselves
-    $KUBECTL delete --all $($KUBECTL api-resources -o name --verbs=delete --namespaced=true | grep -v '^apiservices$' | paste -s --delimiters=',') --namespace="$NS" --grace-period=0 --force
+    $KUBECTL delete --all $($KUBECTL api-resources -o name --verbs=delete --namespaced=true | grep -v '^apiservices$' | paste -s --delimiters=',') --namespace="$NS" --grace-period=2 --force
   done
   REMOVEABLE_NSES=$($KUBECTL get ns -o=name | awk -F/ '{if ($2 !~ /^(default|kube-public|kube-system)$/) print}' | paste -s --delimiters=' ')
   if [ -n "$REMOVEABLE_NSES" ]
