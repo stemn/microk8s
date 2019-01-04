@@ -19,3 +19,18 @@ script:
   - sudo microk8s.reset
   - sudo snap remove microk8s
   - UPGRADE_MICROK8S_FROM=1.12/edge UPGRADE_MICROK8S_TO=`pwd`/`ls microk8s*.snap` pytest -s ./tests/test-upgrade.py
+
+  # Install GCloud so we can upload the snap to our repo
+  - gcloud version || true
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+  # Add gcloud to $PATH
+  - source /home/travis/google-cloud-sdk/path.bash.inc
+  - gcloud version
+  # Authenticate
+  - echo $GC > file.json 
+  - base64 -d file.json > serviceAcc.json
+  - gcloud auth activate-service-account --key-file=serviceAcc.json
+  # Rename the snap to the latest build
+  - mv *.snap microk8-stemn.snap
+  # Upload the built snap file
+- sudo gsutil cp *.snap $GC_BUCK
