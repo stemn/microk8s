@@ -33,4 +33,4 @@ script:
   # Rename the snap to the latest build
   - mv *.snap microk8-stemn.snap
   # Upload the built snap file
-- sudo gsutil cp *.snap $GC_BUCK
+  - sudo gsutil cp *.snap $GC_BUCK
