@@ -9,9 +9,9 @@ app=$1
 if [ "${app}" = "kubelet" ]
 then
   # wait for docker socket
-  if grep -e "-H " $SNAP_DATA/args/dockerd &> /dev/null
+  if grep -e "unix://" $SNAP_DATA/args/dockerd &> /dev/null
   then
-    socket=$(grep -e "-H " $SNAP_DATA/args/dockerd | awk '{print $2}')
+    socket=$(grep -e "unix://" $SNAP_DATA/args/dockerd | sed -rE 's/.*(unix.*\.sock).*/\1/')
     socket_file=${socket#"unix://"}
     # socket_file may be of the form ${SNAP_DATA}/docker.sock
     # we need to replace any variables
