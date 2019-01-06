@@ -1,6 +1,6 @@
 # MicroK8s
 
-![](https://img.shields.io/badge/Kubernetes-1.12-326de6.svg) ![Build Status](https://travis-ci.org/ubuntu/microk8s.svg)
+![](https://img.shields.io/badge/Kubernetes-1.13-326de6.svg) ![Build Status](https://travis-ci.org/ubuntu/microk8s.svg)
 
 <img src="https://raw.githubusercontent.com/cncf/artwork/master/kubernetes/certified-kubernetes/versionless/color/certified-kubernetes-color.png" align="right" width="200px">Kubernetes in a [snap](https://snapcraft.io/) that you can run locally.
 
@@ -153,7 +153,7 @@ The [Kubenet](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-stor
 
 `sudo ufw allow in on cbr0 && sudo ufw allow out on cbr0`
 
-### My pods can't reach the internet (but my MicroK8s host machine can).
+### My pods can't reach the internet or each other (but my MicroK8s host machine can).
 Make sure packets to/from the pod network interface can be forwarded
 to/from the default interface on the host:
 
@@ -162,6 +162,12 @@ to/from the default interface on the host:
 or, if using `ufw`:
 
 `sudo ufw default allow routed`
+
+The microk8s inspect command can be used to check the firewall configuration:
+
+`microk8s.inspect`
+
+A warning will be shown if the firewall is not forwarding traffic.
 
 ### My host machine changed IP and now MicroK8s is not working properly.
 The host machine IP may change whenever you switch places with your laptop or you go through a suspend/resume cycle. The kubernetes API server advertises this IP (taken from the default interface) to all kubernetes cluster members. Services such as DNS and the dashboard will lose connectivity to API server in case the host IP changes. You will need to restart MicroK8s whenever this happens:
@@ -199,6 +205,7 @@ To speed-up a build you can reuse the binaries already downloaded from a previou
 ... this build will take a long time and will download all binaries ...
 > cp -r parts/microk8s/build/build/kube_bins .
 > export KUBE_SNAP_BINS=$PWD/kube_bins/v1.10.3/
+> snapcraft clean
 > snapcraft
 ... this build will be much faster and will reuse binaries in KUBE_SNAP_BINS
 
