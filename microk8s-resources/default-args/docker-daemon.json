@@ -1,3 +1,8 @@
 {
-  "insecure-registries" : ["localhost:32000"]
+  "hosts": [
+    "unix:///var/snap/microk8s/current/docker.sock"
+  ],
+  "insecure-registries": [
+    "localhost:32000"
+  ]
 }
